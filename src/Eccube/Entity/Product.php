@@ -472,11 +472,10 @@ if (!class_exists('\Eccube\Entity\Product')) {
          */
         private $free_area;
 
-
         /**
-         * @var \DateTime
+         * @var integer
          *
-         * @ORM\Column(name="delivery_date", type="datetimetz")
+         * @ORM\Column(name="delivery_date", type="integer")
          */
         private $delivery_date;
 
@@ -763,6 +762,13 @@ if (!class_exists('\Eccube\Entity\Product')) {
             return $this->free_area;
         }
 
+
+
+
+
+
+
+
         /**
          * Set deliveyDate.
          *
@@ -786,6 +792,11 @@ if (!class_exists('\Eccube\Entity\Product')) {
         {
             return $this->delivery_date;
         }
+
+
+
+
+
 
 
 

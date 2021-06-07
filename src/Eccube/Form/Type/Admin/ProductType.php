@@ -27,6 +27,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -150,7 +151,7 @@ class ProductType extends AbstractType
             // ->add('delivery_date', DateTimeType::class, [
             //     'required' => false,
             // ])
-            ->add('delivery_date', DateType::class, [
+            ->add('delivery_date', IntegerType::class, [
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(['max' => $this->eccubeConfig['eccube_ltext_len']]),
