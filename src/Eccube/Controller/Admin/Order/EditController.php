@@ -188,6 +188,7 @@ class EditController extends AbstractController
         $OriginOrder = null;
 
         if (null === $id) {
+            // dd("herer is null");
             // 空のエンティティを作成.
             $TargetOrder = new Order();
             $TargetOrder->addShipping((new Shipping())->setOrder($TargetOrder));
@@ -195,6 +196,7 @@ class EditController extends AbstractController
             $preOrderId = $this->orderHelper->createPreOrderId();
             $TargetOrder->setPreOrderId($preOrderId);
         } else {
+            // dd("herer is not null");
             $TargetOrder = $this->orderRepository->find($id);
             if (null === $TargetOrder) {
                 throw new NotFoundHttpException();
@@ -323,7 +325,6 @@ class EditController extends AbstractController
                         $this->addSuccess('admin.common.save_complete', 'admin');
 
                         log_info('受注登録完了', [$TargetOrder->getId()]);
-
                         if ($returnLink = $form->get('return_link')->getData()) {
                             try {
                                 // $returnLinkはpathの形式で渡される. pathが存在するかをルータでチェックする.
@@ -342,7 +343,6 @@ class EditController extends AbstractController
                                 log_warning('URLの形式が不正です。');
                             }
                         }
-
                         return $this->redirectToRoute('admin_order_edit', ['id' => $TargetOrder->getId()]);
                     }
 

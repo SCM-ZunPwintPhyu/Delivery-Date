@@ -614,7 +614,6 @@ class ShoppingController extends AbstractShoppingController
             if ($response) {
                 return $response;
             }
-
             $event = new EventArgs(
                 [
                     'form' => $form,
