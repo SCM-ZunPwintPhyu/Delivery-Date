@@ -1,0 +1,181 @@
+{#
+    This file is part of EC-CUBE
+    
+    Copyright(c) EC-CUBE CO.,LTD. All Rights Reserved.
+    
+    http://www.ec-cube.co.jp/
+    
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+    #}
+    {% extends 'default_frame.twig' %}
+    
+    {% set mypageno = 'index' %}
+    
+    {% set body_class = 'mypage' %}
+    
+    {% block main %}
+    <div>
+        <h1 style="text-align:center">{{ 'front.shopping.title'|trans }}</h1>
+        <div style="width:20%;margin:0% 37% 0% 43%">
+            <a class="btn btn-primary" href="javascript:void(0)" onclick="window.print();return false;">{{ 'このページを印刷'|trans }}</a>
+        </div>
+        {% set remessage = false %}
+        <div class="ec-orderOrder">
+    
+            <p class="ec-definitions" style="border-bottom:1px solid black;width:350px">{{ 'common.name.prefix'|trans }}{{
+                Order.name01 }} {{ Order.name02 }}</span>{{ 'common.name.suffix'|trans }}{{ Order.kana01 }}</span> {{
+                Order.kana02 }}</p>
+            <div class="ec-definitions" style="float:right">{{ 'front.mypage.order_date'|trans }}{{
+                Order.create_date|date_sec }}</div>
+    
+            <div class="ec-definitions">
+                <dt>{{ 'front.mypage.order_date'|trans }}</dt>
+                <dd>{{ Order.create_date|date_sec }}</dd>
+                {% for Shipping in Order.Shippings %}
+                <div class="ec-definitions--soft">
+                    <dt>{{ 'front.mypage.delivery_provider'|trans }} :</dt>
+                    <dd>{{ Shipping.shipping_delivery_name }}</dd>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="float:right;margin-top:-20px">
+                {% for Shipping in Order.Shippings %}
+                {% set isShowReducedTaxMess = false %}
+                <div>
+                    <p>{{ 'common.postal_symbol'|trans }}{{ Shipping.postal_code }} {{ Shipping.Pref }}</p>
+                    <p>{{ Shipping.addr01 }}{{ Shipping.addr02 }}</p>
+                    <p>TEL:{{ Shipping.phone_number }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            <br>
+        </div>
+        <div>
+            <h3 style="text-align:center;border-bottom:1.5px solid black">{{ 'front.cart.product'|trans }}</h3>
+            <div style="float:right;margin-right:30%">
+                <dl class="ec-definitions">
+                    <dt>{{ 'common.subtotal'|trans }}</dt>
+                    <dd class="ec-totalBox__specTotal">{{ Order.subtotal|price }}</dd>
+                </dl>
+                <dl class="ec-definitions">
+                    <dt>{{ 'common.charge'|trans }}</dt>
+                    <dd>{{ Order.charge|price }}</dd>
+                </dl>
+                <dl class="ec-definitions">
+                    <dt>{{ 'common.delivery_fee'|trans }}</dt>
+                    <dd>{{ Order.deliveryFeeTotal|price }}</dd>
+                </dl>
+                {% if Order.taxable_discount < 0 %} <dl class="ec-totalBox__spec">
+                    <dt>{{ 'common.discount'|trans }}</dt>
+                    <dd>{{ Order.taxable_discount|price }}</dd>
+                    </dl>
+                    {% endif %}
+                    <div class="ec-totalBox__total">{{ 'common.total'|trans }}<span class="ec-totalBox__price">{{
+                            Order.taxable_total|price }}</span><span class="ec-totalBox__taxLabel">{{
+                            'common.tax_include'|trans }}</span></div>
+    
+            </div>
+            <div>
+                {% for Shipping in Order.Shippings %}
+                {% set isShowReducedTaxMess = false %}
+                {% for orderItem in Shipping.productOrderItems %}
+                <div class="ec-orderDelivery__item">
+                    <div style="border-bottom:1.5px dotted black;width:50%">
+                        <p>
+                            {% if orderItem.Product is not null and orderItem.Product.Status.id ==
+                            constant('Eccube\\Entity\\Master\\ProductStatus::DISPLAY_SHOW') %}
+                            <a href="{{ url('product_detail', {'id': orderItem.Product.id}) }}">{{ orderItem.productName
+                                }}</a>
+                            {% else %}
+                            {{ orderItem.productName }}
+                            {% endif %} ×{{ orderItem.quantity }} {% if is_reduced_tax_rate(orderItem) %}{{
+                            'common.reduced_tax_rate_symbol'|trans }}{% set isShowReducedTaxMess = true %}{% endif %}
+                        </p>
+                        {% if orderItem.ProductClass is not null %}
+                        {% if orderItem.ProductClass.ClassCategory1 is not null %}
+                        {{ orderItem.productClass.classCategory1.className.name }}：{{ orderItem.productClass.classCategory1
+                        }}
+                        {% endif %}
+                        {% if orderItem.ProductClass.ClassCategory2 %}
+                        <br>{{ orderItem.productClass.classCategory2.className.name }}：{{
+                        orderItem.productClass.classCategory2 }}
+                        {% endif %}
+                        {% endif %}
+                        <p>{{ orderItem.price_inc_tax|price }}
+                            × {{ orderItem.quantity|number_format }} : {{ (orderItem.price_inc_tax *
+                            orderItem.quantity)|price }}</p>
+                        {% if orderItem.product and orderItem.price_inc_tax != orderItem.productClass.price02IncTax %}
+                        <p class="ec-color-accent">
+                            {{ 'front.mypage.current_price'|trans }}{{ orderItem.productClass.price02IncTax|price }}</p>
+                        {% set remessage = true %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+            <h3 style="text-align:center;border-bottom:1.5px solid black">{{ 'front.mypage.delivery_info'|trans }}</h3>
+            <div style="float:right;margin-right:25%">
+                {% for Shipping in Order.Shippings %}
+                {% set isShowReducedTaxMess = false %}
+                {% for orderItem in Shipping.productOrderItems %}
+                <div class="ec-orderDelivery__item">
+                    <div>
+                        <p>
+                            {% if orderItem.Product is not null and orderItem.Product.Status.id ==
+                            constant('Eccube\\Entity\\Master\\ProductStatus::DISPLAY_SHOW') %}
+                            <a href="{{ url('product_detail', {'id': orderItem.Product.id}) }}">{{ orderItem.productName
+                                }}</a>
+                            {% else %}
+                            {{ orderItem.productName }}
+                            {% endif %} ×{{ orderItem.quantity }} {% if is_reduced_tax_rate(orderItem) %}{{
+                            'common.reduced_tax_rate_symbol'|trans }}{% set isShowReducedTaxMess = true %}{% endif %}
+                        </p>
+                        {% if orderItem.ProductClass is not null %}
+                        {% if orderItem.ProductClass.ClassCategory1 is not null %}
+                        {{ orderItem.productClass.classCategory1.className.name }}：{{ orderItem.productClass.classCategory1
+                        }}
+                        {% endif %}
+                        {% if orderItem.ProductClass.ClassCategory2 %}
+                        <br>{{ orderItem.productClass.classCategory2.className.name }}：{{
+                        orderItem.productClass.classCategory2 }}
+                        {% endif %}
+                        {% endif %}
+                        <p>{{ orderItem.price_inc_tax|price }}
+                            × {{ orderItem.quantity|number_format }}</p>
+                        {% if orderItem.product and orderItem.price_inc_tax != orderItem.productClass.price02IncTax %}
+                        <p class="ec-color-accent">
+                            {{ 'front.mypage.current_price'|trans }}{{ orderItem.productClass.price02IncTax|price }}</p>
+                        {% set remessage = true %}
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% endfor %}
+            </div>
+            <p>{{ 'front.shopping.payment_info'|trans }}</p>
+            <p class="ec-definitions">{{ 'common.name.prefix'|trans }}{{ Order.name01 }} {{ Order.name02 }}</span>{{
+                'common.name.suffix'|trans }}{{ Order.kana01 }}</span> {{ Order.kana02 }}</p>
+            {% for Shipping in Order.Shippings %}
+            <p>{{ 'common.postal_symbol'|trans }}{{ Shipping.postal_code }} {{ Shipping.Pref }}{{ Shipping.addr01 }}{{
+                Shipping.addr02 }}</p>
+            <p>TEL:{{ Shipping.phone_number }}</p>
+            {% endfor %}
+            {% if BaseInfo.option_mypage_order_status_display %}
+            <div class="ec-definitions">
+                <dt>{{ 'front.mypage.order_status'|trans }}</dt>
+                <dd>{{ Order.CustomerOrderStatus }}</dd>
+            </div>
+            {% endif %}
+            <div class="ec-definitions">
+                <dt>{{ 'front.mypage.order_date'|trans }}</dt>
+                <dd>{{ Order.create_date|date_sec }}</dd>
+            </div>
+        </div><br><br>
+        <h3 style="text-align:center;border-bottom:1.5px dotted black">{{ 'front.shopping.payment_info'|trans }}</h3>
+        <div class="ec-role">
+            <a href="{{ url('mypage') }}" class="ec-inlineBtn--cancel">{{ 'common.back'|trans }}</a>
+        </div><br>
+    </div>
+    {% endblock %}
