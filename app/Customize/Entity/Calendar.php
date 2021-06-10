@@ -1,12 +1,6 @@
 <?php
 
-/*
- * Creating Entity For Calendar Master table.
- * By May Thin Lwin
- * Created at 2020-10-19
- * Version 4.0.4
- */
-namespace Eccube\Entity;
+namespace Customize\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 
