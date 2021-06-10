@@ -200,12 +200,12 @@ file that was distributed with this source code.
                         data-confirm="false">{{ 'Receipe'|trans }}</a>
                     {% endif %}
                 </div>
-                <!-- <div class="ec-totalBox">
+                <div class="ec-totalBox">
                     {% if stockOrder %}
                             <a  href="{{ url('customer_order_export_order', {'order_no': Order.order_no }) }}" id="orderCsvDownload"
                         class="ec-blockBtn--cancel">{{ 'admin.order.order_csv'|trans }}</a>
                     {% endif %}
-                </div> -->
+                </div>
                 {% if remessage %}
                     <p class="ec-color-accent">
                         <strong>{{ 'front.mypage.reorder_message'|trans }}</strong>

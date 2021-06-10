@@ -146,17 +146,7 @@ class MypageController extends BaseController
      * @return StreamedResponse
      */
     public function exportOrder(Request $request,$order_no)
-    {
-        // $filename = 'order_'.(new \DateTime())->format('YmdHis').'.csv';
-        // log_info('受注CSV出力ファイル名', [$filename]);
-        // return $this->exportCsv($request, CsvType::CSV_TYPE_ORDER, $filename);
-        
-        // $filename = 'order_'.(new \DateTime())->format('YmdHis').'.csv';
-        // $path = $_SERVER['DOCUMENT_ROOT'].'\\'.$filename;
-        // mkdir($path,0777);
-
-        // $response = fopen ($filename."/$filename","w");
-       
+    {  
         $filename = 'order_'.(new \DateTime())->format('Ymd').$order_no.'.csv';
     	$path = $_SERVER['DOCUMENT_ROOT'].'\\'.$filename;
     	return $this->exportCsv($request,$order_no,$path, $filename);
@@ -173,16 +163,9 @@ class MypageController extends BaseController
      */
     protected function exportCsv(Request $request,$order_no, $path, $fileName)
     {
-        // dd($path);
-        // タイムアウトを無効にする.
         set_time_limit(0);
 
-        // sql loggerを無効にする.
-        // $em = $this->entityManager;
-        // $em->getConfiguration()->setSQLLogger(null);
-
         $response = new StreamedResponse();
-        // dd($this->csvExportService);
         $response->setCallback(function () use ($request,$order_no, $path) {
         
             // CSV種別を元に初期化.
