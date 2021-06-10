@@ -397,8 +397,14 @@ class ProductController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isValid()) {
+            // $errors = $form->getErrors(true);
+            // foreach ($errors as $error) {
+            //     $message = $error->getMessage();
+            // }
+            // log_info($message);
             throw new NotFoundHttpException();
         }
+        
 
         $addCartData = $form->getData();
 

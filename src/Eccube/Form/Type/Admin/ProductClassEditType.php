@@ -206,7 +206,6 @@ class ProductClassEditType extends AbstractType
             // 在庫数
             $errors = $this->validator->validate($data['stock'], [
                 new Assert\Regex([
-                    'pattern' => "/^\d+$/u",
                     'message' => 'form_error.numeric_only',
                 ]),
             ]);
@@ -226,7 +225,6 @@ class ProductClassEditType extends AbstractType
                     'value' => 1,
                 ]),
                 new Assert\Regex([
-                    'pattern' => "/^\d+$/u",
                     'message' => 'form_error.numeric_only',
                 ]),
             ]);
@@ -243,7 +241,6 @@ class ProductClassEditType extends AbstractType
             $errors = $this->validator->validate($data['tax_rate'], [
                 new Assert\Range(['min' => 0, 'max' => 100]),
                 new Assert\Regex([
-                    'pattern' => "/^\d+(\.\d+)?$/",
                     'message' => 'form_error.float_only',
                 ]),
             ]);

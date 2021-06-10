@@ -125,7 +125,7 @@ class ShippingController extends AbstractController
     /**
      * 出荷登録/編集画面.
      *
-     * @Route("/%eccube_admin_route%/shipping/{id}/edit", requirements={"id" = "\d+"}, name="admin_shipping_edit")
+     * @Route("/%eccube_admin_route%/shipping/{id}/edit", name="admin_shipping_edit")
      * @Template("@admin/Order/shipping.twig")
      */
     public function index(Request $request, Order $Order)
@@ -294,7 +294,7 @@ class ShippingController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/shipping/preview_notify_mail/{id}", requirements={"id" = "\d+"}, name="admin_shipping_preview_notify_mail")
+     * @Route("/%eccube_admin_route%/shipping/preview_notify_mail/{id}", name="admin_shipping_preview_notify_mail")
      *
      * @param Shipping $Shipping
      *
@@ -308,7 +308,7 @@ class ShippingController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/shipping/notify_mail/{id}", requirements={"id" = "\d+"}, name="admin_shipping_notify_mail", methods={"PUT"})
+     * @Route("/%eccube_admin_route%/shipping/notify_mail/{id}", name="admin_shipping_notify_mail", methods={"PUT"})
      *
      * @param Shipping $Shipping
      *

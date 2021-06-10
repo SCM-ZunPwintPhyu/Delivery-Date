@@ -43,13 +43,8 @@ class CalendarRepository extends AbstractRepository
      */
     public function cal($value)
     {
-        // dd($value);
-        // $data123=date_add(new \DateTime(),date_interval_create_from_date_string($value."days"));
-        // dd($data123);
-
-        // log_info("herer is calendar repository",[new \DateTime()]);
         $qb = $this->createQueryBuilder('c')
-            ->where('c.date > :date')
+            ->where('c.date >= :date')
             ->setParameter('date', $value)
             ->orderBy('c.id', 'ASC');
         $Calendar = $qb->getQuery()

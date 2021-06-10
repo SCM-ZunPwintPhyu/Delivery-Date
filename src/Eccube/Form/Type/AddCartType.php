@@ -79,7 +79,7 @@ class AddCartType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new Assert\NotBlank(),
-                    new Assert\Regex(['pattern' => '/^\d+$/']),
+                   
                 ], ])
             ->add(
                 $builder
@@ -106,7 +106,7 @@ class AddCartType extends AbstractType
                         new Assert\GreaterThanOrEqual([
                             'value' => 1,
                         ]),
-                        new Assert\Regex(['pattern' => '/^\d+$/']),
+                       
                     ],
                 ]);
             if ($Product && $Product->getProductClasses()) {

@@ -129,18 +129,6 @@ class ShippingType extends AbstractType
         );
 
 
-
-
-
-        
-                // $CalendarDeliveryTime = null;
-                // $DeliveryTimes = [];
-                // $Delivery = $this->calendarRepository->cal();
-                // dd($Delivery);
-                
-
-
-
         //  // お届け日のプルダウンを生成
          $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
@@ -155,12 +143,11 @@ class ShippingType extends AbstractType
                 
                 // 配送時に最大となる商品日数を取得
                 foreach ($Shipping->getProductOrderItems() as $detail) {
-                    $maxDate[]=$detail->getProduct()->getDeliveryDate();
+                    $maxDate[]=$detail->getProduct()->getDesireDeliveryDate();
                 }
                 
                 $date = max($maxDate);
                 $value=date_add(new \DateTime(),date_interval_create_from_date_string($date."days"));
-                // dd( $date);
 
                 // 配達最大日数期間を設定
                 $dateFormatter = \IntlDateFormatter::create(
@@ -171,14 +158,11 @@ class ShippingType extends AbstractType
                     \IntlDateFormatter::TRADITIONAL,
                     'E'
                 );
-                $Calendar = $this->calendarRepository->cal($value);
+                $Calendar = $this->calendarRepository->cal($value->format('Y-m-d'));
                 $DateArray = [];
                 foreach($Calendar as $calendar){
                     $DateArray[$calendar->getDate()->format('Y/m/d')] = $calendar->getDate()->format('Y/m/d').'('.$dateFormatter->format($calendar->getDate()).')';
-                    // date_add($date,date_interval_create_from_date_string("10 days"));
                 }
-                // $Shipping1 = $event->getData()->getOrderItems()->getProductClass()->getProduct();
-
                 $form = $event->getForm();
                 $form
                     ->add(
@@ -194,23 +178,6 @@ class ShippingType extends AbstractType
                     );
             }
         );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         // お届け時間のプルダウンを生成

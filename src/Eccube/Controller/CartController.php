@@ -189,6 +189,7 @@ class CartController extends AbstractController
      *     methods={"PUT"},
      *     requirements={
      *          "operation": "up|down|remove",
+     *       
      *     }
      * )
      */

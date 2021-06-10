@@ -101,7 +101,6 @@ class ShippingMultipleItemType extends AbstractType
                     new Assert\GreaterThanOrEqual([
                         'value' => 1,
                     ]),
-                    new Assert\Regex(['pattern' => '/^\d+$/']),
                 ],
             ])
             ->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {

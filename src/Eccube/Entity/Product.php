@@ -776,7 +776,7 @@ if (!class_exists('\Eccube\Entity\Product')) {
          *
          * @return Product
          */
-        public function setDeliveryDate($deliveryDate)
+        public function setDesireDeliveryDate($deliveryDate)
         {
             $this->desire_delivery_date = $deliveryDate;
 
@@ -788,7 +788,7 @@ if (!class_exists('\Eccube\Entity\Product')) {
          *
          * @return \DateTime
          */
-        public function getDeliveryDate()
+        public function getDesireDeliveryDate()
         {
             return $this->desire_delivery_date;
         }

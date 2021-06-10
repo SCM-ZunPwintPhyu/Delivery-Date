@@ -91,6 +91,7 @@ class ShoppingController extends AbstractShoppingController
     {
         // ログイン状態のチェック.
         if ($this->orderHelper->isLoginRequired()) {
+          
             log_info('[注文手続] 未ログインもしくはRememberMeログインのため, ログイン画面に遷移します.');
 
             return $this->redirectToRoute('shopping_login');
@@ -99,6 +100,7 @@ class ShoppingController extends AbstractShoppingController
         // カートチェック.
         $Cart = $this->cartService->getCart();
         if (!($Cart && $this->orderHelper->verifyCart($Cart))) {
+
             log_info('[注文手続] カートが購入フローへ遷移できない状態のため, カート画面に遷移します.');
 
             return $this->redirectToRoute('cart');
@@ -130,6 +132,7 @@ class ShoppingController extends AbstractShoppingController
 
         // マイページで会員情報が更新されていれば, Orderの注文者情報も更新する.
         if ($Customer->getId()) {
+            // dd("hererer id");
             $this->orderHelper->updateCustomerInfo($Order, $Customer);
             $this->entityManager->flush();
         }

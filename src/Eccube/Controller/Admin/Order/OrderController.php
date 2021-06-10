@@ -190,7 +190,7 @@ class OrderController extends AbstractController
      *      - 検索条件は空配列, ページ番号は1で初期化し, セッションに保存します.
      *
      * @Route("/%eccube_admin_route%/order", name="admin_order")
-     * @Route("/%eccube_admin_route%/order/page/{page_no}", requirements={"page_no" = "\d+"}, name="admin_order_page")
+     * @Route("/%eccube_admin_route%/order/page/{page_no}",name="admin_order_page")
      * @Template("@admin/Order/index.twig")
      */
     public function index(Request $request, $page_no = null, PaginatorInterface $paginator)
