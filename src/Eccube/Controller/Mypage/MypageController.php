@@ -349,7 +349,7 @@ class MypageController extends AbstractController
     /**
      * お気に入り商品を削除する.
      *
-     * @Route("/mypage/favorite/{id}/delete", name="mypage_favorite_delete", methods={"DELETE"}, requirements={"id" = "\d+"})
+     * @Route("/mypage/favorite/{id}/delete", name="mypage_favorite_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Product $Product)
     {

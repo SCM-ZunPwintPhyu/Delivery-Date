@@ -262,7 +262,7 @@ class ProductController extends AbstractController
     /**
      * 商品詳細画面.
      *
-     * @Route("/products/detail/{id}", name="product_detail", methods={"GET"}, requirements={"id" = "\d+"})
+     * @Route("/products/detail/{id}", name="product_detail", methods={"GET"})
      * @Template("Product/detail.twig")
      * @ParamConverter("Product", options={"repository_method" = "findWithSortedClassCategories"})
      *
@@ -314,7 +314,7 @@ class ProductController extends AbstractController
     /**
      * お気に入り追加.
      *
-     * @Route("/products/add_favorite/{id}", name="product_add_favorite", requirements={"id" = "\d+"})
+     * @Route("/products/add_favorite/{id}", name="product_add_favorite")
      */
     public function addFavorite(Request $request, Product $Product)
     {
@@ -363,7 +363,7 @@ class ProductController extends AbstractController
     /**
      * カートに追加.
      *
-     * @Route("/products/add_cart/{id}", name="product_add_cart", methods={"POST"}, requirements={"id" = "\d+"})
+     * @Route("/products/add_cart/{id}", name="product_add_cart", methods={"POST"})
      */
     public function addCart(Request $request, Product $Product)
     {

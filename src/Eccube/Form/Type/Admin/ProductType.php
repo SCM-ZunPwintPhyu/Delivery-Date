@@ -75,6 +75,13 @@ class ProductType extends AbstractType
             ->add('class', ProductClassType::class, [
                 'mapped' => false,
             ])
+            ->add('id', TextType::class, [
+                'required' => true,
+                
+                'constraints' => [
+                    new Assert\Length(['max' => $this->eccubeConfig['eccube_stext_len']]),
+                ],
+            ])
             // 基本情報
             ->add('name', TextType::class, [
                 'constraints' => [
@@ -151,7 +158,7 @@ class ProductType extends AbstractType
             // ->add('delivery_date', DateTimeType::class, [
             //     'required' => false,
             // ])
-            ->add('delivery_date', IntegerType::class, [
+            ->add('desire_delivery_date', IntegerType::class, [
                 'required' => false,
                 'constraints' => [
                     new Assert\Length(['max' => $this->eccubeConfig['eccube_ltext_len']]),

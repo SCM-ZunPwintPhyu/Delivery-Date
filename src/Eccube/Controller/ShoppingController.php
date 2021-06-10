@@ -478,7 +478,7 @@ class ShoppingController extends AbstractShoppingController
      * 会員ログイン時, お届け先を選択する画面を表示する
      * 非会員の場合はこの画面は使用しない。
      *
-     * @Route("/shopping/shipping/{id}", name="shopping_shipping", requirements={"id" = "\d+"})
+     * @Route("/shopping/shipping/{id}", name="shopping_shipping")
      * @Template("Shopping/shipping.twig")
      */
     public function shipping(Request $request, Shipping $Shipping)
@@ -552,7 +552,7 @@ class ShoppingController extends AbstractShoppingController
      * 会員時は新しいお届け先を作成し, 作成したお届け先を選択状態にして注文手続き画面へ遷移する.
      * 非会員時は選択されたお届け先の編集を行う.
      *
-     * @Route("/shopping/shipping_edit/{id}", name="shopping_shipping_edit", requirements={"id" = "\d+"})
+     * @Route("/shopping/shipping_edit/{id}", name="shopping_shipping_edit")
      * @Template("Shopping/shipping_edit.twig")
      */
     public function shippingEdit(Request $request, Shipping $Shipping)

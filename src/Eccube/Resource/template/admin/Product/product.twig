@@ -296,6 +296,20 @@ file that was distributed with this source code.
                                 <div class="row">
                                     <div class="col-3">
                                         <div class="d-inline-block">
+                                            <span>{{ 'admin.product.product_id'|trans }}</span>
+                                            <span class="badge badge-primary ml-1">
+                                                {{ 'admin.common.required'|trans }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-2">
+                                        {{ form_widget(form.id) }}
+                                        {{ form_errors(form.id) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="d-inline-block">
                                             <span>{{ 'admin.product.name'|trans }}</span>
                                             <span class="badge badge-primary ml-1">
                                                 {{ 'admin.common.required'|trans }}
@@ -431,8 +445,8 @@ file that was distributed with this source code.
                                         </div>
                                         <div class="col mb-2">
                                             <div>
-                                                {{ form_widget(form.delivery_date) }}
-                                                {{ form_errors(form.delivery_date) }}
+                                                {{ form_widget(form.desire_delivery_date) }}
+                                                {{ form_errors(form.desire_delivery_date) }}
                                             </div>
                                         </div>
                                     </div>

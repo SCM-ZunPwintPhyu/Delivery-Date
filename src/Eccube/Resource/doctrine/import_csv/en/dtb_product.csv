@@ -1,1 +1,1 @@
-id,creator_id,product_status_id,name,note,description_list,description_detail,search_word,free_area,delivery_date,create_date,update_date,discriminator_type
+id,creator_id,product_status_id,name,note,description_list,description_detail,search_word,free_area,desire_delivery_date,create_date,update_date,discriminator_type

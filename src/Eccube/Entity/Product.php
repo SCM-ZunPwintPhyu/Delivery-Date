@@ -475,9 +475,9 @@ if (!class_exists('\Eccube\Entity\Product')) {
         /**
          * @var integer
          *
-         * @ORM\Column(name="delivery_date", type="integer")
+         * @ORM\Column(name="desire_delivery_date", type="integer")
          */
-        private $delivery_date;
+        private $desire_delivery_date;
 
         /**
          * @var \DateTime
@@ -778,7 +778,7 @@ if (!class_exists('\Eccube\Entity\Product')) {
          */
         public function setDeliveryDate($deliveryDate)
         {
-            $this->delivery_date = $deliveryDate;
+            $this->desire_delivery_date = $deliveryDate;
 
             return $this;
         }
@@ -790,7 +790,7 @@ if (!class_exists('\Eccube\Entity\Product')) {
          */
         public function getDeliveryDate()
         {
-            return $this->delivery_date;
+            return $this->desire_delivery_date;
         }
 
 

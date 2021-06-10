@@ -64,7 +64,7 @@ class DeliveryController extends AbstractController
      * お届け先編集画面.
      *
      * @Route("/mypage/delivery/new", name="mypage_delivery_new")
-     * @Route("/mypage/delivery/{id}/edit", name="mypage_delivery_edit", requirements={"id" = "\d+"})
+     * @Route("/mypage/delivery/{id}/edit", name="mypage_delivery_edit")
      * @Template("Mypage/delivery_edit.twig")
      */
     public function edit(Request $request, $id = null)

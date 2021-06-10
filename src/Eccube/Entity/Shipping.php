@@ -143,7 +143,7 @@ if (!class_exists('\Eccube\Entity\Shipping')) {
          *
          * @var \DateTime|null
          *
-         * @ORM\Column(name="delivery_date", type="datetimetz", nullable=true)
+         * @ORM\Column(name="desire_delivery_date", type="datetimetz", nullable=true)
          */
         private $shipping_delivery_date;
 

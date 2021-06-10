@@ -272,7 +272,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/product/classes/{id}/load", name="admin_product_classes_load", methods={"GET"}, requirements={"id" = "\d+"})
+     * @Route("/%eccube_admin_route%/product/classes/{id}/load", name="admin_product_classes_load", methods={"GET"})
      * @Template("@admin/Product/product_class_popup.twig")
      * @ParamConverter("Product")
      */
@@ -352,7 +352,7 @@ class ProductController extends AbstractController
 
     /**
      * @Route("/%eccube_admin_route%/product/product/new", name="admin_product_product_new")
-     * @Route("/%eccube_admin_route%/product/product/{id}/edit", requirements={"id" = "\d+"}, name="admin_product_product_edit")
+     * @Route("/%eccube_admin_route%/product/product/{id}/edit", name="admin_product_product_edit")
      * @Template("@admin/Product/product.twig")
      */
     public function edit(Request $request, $id = null, RouterInterface $router, CacheUtil $cacheUtil)
@@ -361,9 +361,7 @@ class ProductController extends AbstractController
         // dd($request);
         $has_class = false;
         if (is_null($id)) {
-            // dd("herer is null id");
             $Product = new Product();
-            // dd($Product);
             $ProductClass = new ProductClass();
             $ProductStatus = $this->productStatusRepository->find(ProductStatus::DISPLAY_HIDE);
             $Product
@@ -374,11 +372,9 @@ class ProductController extends AbstractController
                 ->setStockUnlimited(true)
                 ->setProduct($Product);
             $ProductStock = new ProductStock();
-            // dd($ProductStock);
             $ProductClass->setProductStock($ProductStock);
             $ProductStock->setProductClass($ProductClass);
         } else {
-            // dd("herer is not null id");
             $Product = $this->productRepository->find($id);
             if (!$Product) {
                 throw new NotFoundHttpException();
@@ -406,6 +402,7 @@ class ProductController extends AbstractController
 
         $builder = $this->formFactory
             ->createBuilder(ProductType::class, $Product);
+        
 
         // 規格あり商品の場合、規格関連情報をFormから除外
         if ($has_class) {
@@ -455,7 +452,6 @@ class ProductController extends AbstractController
 
                 if (!$has_class) {
                     $ProductClass = $form['class']->getData();
-
                     // 個別消費税
                     if ($this->BaseInfo->isOptionProductTaxRule()) {
                         if ($ProductClass->getTaxRate() !== null) {
@@ -484,6 +480,7 @@ class ProductController extends AbstractController
                     if (!$ProductClass->isStockUnlimited()) {
                         $ProductStock->setStock($ProductClass->getStock());
                     } else {
+                        // dd("ProductClass is not StockUnlimited");
                         // 在庫無制限時はnullを設定
                         $ProductStock->setStock(null);
                     }
@@ -661,7 +658,7 @@ class ProductController extends AbstractController
         $ChoicedCategoryIds = array_map(function ($Category) {
             return $Category->getId();
         }, $form->get('Category')->getData());
-// dd($Product);
+
         return [
             'Product' => $Product,
             'Tags' => $Tags,
@@ -676,7 +673,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/product/product/{id}/delete", requirements={"id" = "\d+"}, name="admin_product_product_delete", methods={"DELETE"})
+     * @Route("/%eccube_admin_route%/product/product/{id}/delete", name="admin_product_product_delete", methods={"DELETE"})
      */
     public function delete(Request $request, $id = null, CacheUtil $cacheUtil)
     {
@@ -769,7 +766,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/product/product/{id}/copy", requirements={"id" = "\d+"}, name="admin_product_product_copy", methods={"POST"})
+     * @Route("/%eccube_admin_route%/product/product/{id}/copy", name="admin_product_product_copy", methods={"POST"})
      */
     public function copy(Request $request, $id = null)
     {
@@ -869,7 +866,7 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route("/%eccube_admin_route%/product/product/{id}/display", requirements={"id" = "\d+"}, name="admin_product_product_display")
+     * @Route("/%eccube_admin_route%/product/product/{id}/display", name="admin_product_product_display")
      */
     public function display(Request $request, $id = null)
     {
@@ -1020,7 +1017,7 @@ class ProductController extends AbstractController
     /**
      * Bulk public action
      *
-     * @Route("/%eccube_admin_route%/product/bulk/product-status/{id}", requirements={"id" = "\d+"}, name="admin_product_bulk_product_status", methods={"POST"})
+     * @Route("/%eccube_admin_route%/product/bulk/product-status/{id}", name="admin_product_bulk_product_status", methods={"POST"})
      *
      * @param Request $request
      * @param ProductStatus $ProductStatus
