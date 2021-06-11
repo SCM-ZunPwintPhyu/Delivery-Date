@@ -86,7 +86,7 @@ class ShoppingController extends BaseController
             return $this->redirectToRoute('homepage');
         }
         $Order = $this->orderRepository->find($orderId);
-        $filename = 'order_'.(new \DateTime())->format('YmdHis').$orderId.'.csv';
+        $filename = 'order_'.(new \DateTime())->format('Ymd').$orderId.'.csv';
         $path =$_SERVER['DOCUMENT_ROOT'].'\\'.'csv_output'.'\\'.$filename;
         $this->csvExportService->setCsvName($filename);
         $this->csvExportService->setDir($path); 
