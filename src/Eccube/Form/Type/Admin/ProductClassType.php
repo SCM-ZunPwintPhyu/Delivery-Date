@@ -66,6 +66,7 @@ class ProductClassType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new Assert\Regex([
+                        'pattern' => "/^\d+(\.\d+)?$/u",
                         'message' => 'form_error.numeric_only',
                     ]),
                 ],
@@ -85,6 +86,7 @@ class ProductClassType extends AbstractType
                         'value' => 1,
                     ]),
                     new Assert\Regex([
+                        'pattern' => "/^\d+(\.\d+)?$/u",
                         'message' => 'form_error.numeric_only',
                     ]),
                 ],
@@ -99,6 +101,7 @@ class ProductClassType extends AbstractType
                 'constraints' => [
                     new Assert\Range(['min' => 0, 'max' => 100]),
                     new Assert\Regex([
+                        'pattern' => "/^\d+(\.\d+)?$/u",
                         'message' => 'form_error.float_only',
                     ]),
                 ],

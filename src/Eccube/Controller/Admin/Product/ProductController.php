@@ -375,6 +375,7 @@ class ProductController extends AbstractController
             $ProductClass->setProductStock($ProductStock);
             $ProductStock->setProductClass($ProductClass);
         } else {
+            // dd("herer is not null");
             $Product = $this->productRepository->find($id);
             if (!$Product) {
                 throw new NotFoundHttpException();
