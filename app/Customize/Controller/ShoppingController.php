@@ -17,10 +17,12 @@ use Eccube\Form\Type\Shopping\OrderType;
 use Eccube\Repository\OrderRepository;
 use Eccube\Service\CartService;
 use Eccube\Service\MailService;
+use Customize\Service\CsvExportService;
 use Eccube\Service\OrderHelper;
 use Eccube\Event\EccubeEvents;
 use Eccube\Event\EventArgs;
-use Eccube\Entity\Master\CsvType;
+use Eccube\Entity\ExportCsvRow;
+use Customize\EntityReplace\Csv;
 use Eccube\Service\PurchaseFlow\PurchaseContext;
 use Eccube\Service\PurchaseFlow\PurchaseFlow;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -40,6 +42,11 @@ class ShoppingController extends BaseController
      */
     protected $mailService;
 
+     /**
+     * @var CsvExportService
+     */
+    protected $csvExportService;
+
     /**
      * @var OrderHelper
      */
@@ -53,11 +60,13 @@ class ShoppingController extends BaseController
     public function __construct(
         CartService $cartService,
         MailService $mailService,
+        CsvExportService $csvExportService,
         OrderRepository $orderRepository,
         OrderHelper $orderHelper
     ) {
         $this->cartService = $cartService;
         $this->mailService = $mailService;
+        $this->csvExportService = $csvExportService;
         $this->orderRepository = $orderRepository;
         $this->orderHelper = $orderHelper;
     }
@@ -71,43 +80,79 @@ class ShoppingController extends BaseController
      */
     public function complete(Request $request)
     {
-        log_info('[注文完了] 注文完了画面を表示します.');
-
         // 受注IDを取得
         $orderId = $this->session->get(OrderHelper::SESSION_ORDER_ID);
         if (empty($orderId)) {
-            log_info('[注文完了] 受注IDを取得できないため, トップページへ遷移します.');
-
             return $this->redirectToRoute('homepage');
         }
-
         $Order = $this->orderRepository->find($orderId);
-        $filename = 'order_'.(new \DateTime())->format('YmdHis').'.csv';
-        $this->exportCsv($request, CsvType::CSV_TYPE_ORDER, $filename);
-        $path = $_SERVER['DOCUMENT_ROOT'];
+        $filename = 'order_'.(new \DateTime())->format('YmdHis').$orderId.'.csv';
+        $path =$_SERVER['DOCUMENT_ROOT'].'\\'.'csv_output'.'\\'.$filename;
+        $this->csvExportService->setCsvName($filename);
+        $this->csvExportService->setDir($path); 
+        $this->csvExportService->initCsvType(Csv::CSV_TYPE_ORDER_CSV);
+        $this->csvExportService->exportHeader();
+        $qb = $this->csvExportService->getProductQueryBuilder($request);
         
-        mkdir($path.'\\'.$filename,0777);
+
+        $isOutOfStock = 0;
+        $qb->resetDQLPart('select')
+                ->resetDQLPart('orderBy')
+                ->orderBy('p.update_date', 'DESC');
+
+        if ($isOutOfStock) {
+            $qb->select('p, pc')
+                ->distinct();
+        } else {
+            $qb->select('p')
+                ->distinct();
+        }
+        $this->csvExportService->setExportQueryBuilder($qb);
+
+        $this->csvExportService->exportData(function ($entity, csvExportService $csvService) use ($request) {
+            $Csvs = $csvService->getCsvs();
+            
+
+            /** @var $Order \Eccube\Entity\Order */
+            $Orders = $entity;
 
 
-        $filename = 'order_'.(new \DateTime())->format('YmdHis').'.csv';
-        $this->exportCsv($request, CsvType::CSV_TYPE_ORDER, $filename);
-        $path = $_SERVER['DOCUMENT_ROOT'].'\\'.$filename;
-        mkdir($path,0777);
+            foreach ($Orders as $Order) {
+                $ExportCsvRow = new ExportCsvRow();
 
-        $csv_handler = fopen ($filename."/$filename","w");
+                // CSV出力項目と合致するデータを取得.
+                foreach ($Csvs as $Csv) {
+                    // 商品データを検索.
+                    $ExportCsvRow->setData($csvService->getData($Csv, $Order));
+                    if ($ExportCsvRow->isDataNull()) {
+                        // 商品規格情報を検索.
+                        $ExportCsvRow->setData($csvService->getData($Csv, $Order));
+                    }
 
-        // dd($csv_handler);
+                    $event = new EventArgs(
+                        [
+                            'csvService' => $csvService,
+                            'Csv' => $Csv,
+                            'Order' => $Order,
+                            'ExportCsvRow' => $ExportCsvRow,
+                        ],
+                        $request
+                    );
+                    $this->eventDispatcher->dispatch(EccubeEvents::ADMIN_PRODUCT_CSV_EXPORT, $event);
 
-        fwrite ($csv_handler,$path);
-        fclose ($csv_handler);
+                    $ExportCsvRow->pushData();
+                }
+                $csvService->fputcsv($ExportCsvRow->getRow());
+            }
+        });
 
-        // file_put_contents($filename, $Order);
         $event = new EventArgs(
             [
                 'Order' => $Order,
             ],
             $request
         );
+
         $this->eventDispatcher->dispatch(EccubeEvents::FRONT_SHOPPING_COMPLETE_INITIALIZE, $event);
 
         if ($event->getResponse() !== null) {
@@ -126,22 +171,6 @@ class ShoppingController extends BaseController
             'Order' => $Order,
             'hasNextCart' => $hasNextCart,
         ];
+
     }
-
-
-   /**
-     * @param Request $request
-     * @param $csvTypeId
-     * @param string $fileName
-     *
-     */
-    protected function exportCsv(Request $request, $csvTypeId, $fileName)
-    {
-        // タイムアウトを無効にする.
-        set_time_limit(0);
-        // sql loggerを無効にする.
-        $em = $this->entityManager;
-        $em->getConfiguration()->setSQLLogger(null);
-    }
-
 }
