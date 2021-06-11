@@ -75,13 +75,13 @@
                             Order.taxable_total|price }}</span><span class="ec-totalBox__taxLabel">{{
                             'common.tax_include'|trans }}</span></div>
     
-            </div>
+            </div><br><br>
             <div>
                 {% for Shipping in Order.Shippings %}
                 {% set isShowReducedTaxMess = false %}
                 {% for orderItem in Shipping.productOrderItems %}
                 <div class="ec-orderDelivery__item">
-                    <div style="border-bottom:1.5px dotted black;width:50%">
+                    <div style="border-bottom:1.5px dotted black;width:40%">
                         <p>
                             {% if orderItem.Product is not null and orderItem.Product.Status.id ==
                             constant('Eccube\\Entity\\Master\\ProductStatus::DISPLAY_SHOW') %}
