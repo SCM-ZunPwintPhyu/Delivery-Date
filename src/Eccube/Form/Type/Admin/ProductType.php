@@ -155,9 +155,6 @@ class ProductType extends AbstractType
                 ],
             ])
 
-            // ->add('delivery_date', DateTimeType::class, [
-            //     'required' => false,
-            // ])
             ->add('desire_delivery_date', IntegerType::class, [
                 'required' => false,
                 'constraints' => [
